@@ -34,3 +34,20 @@ class AuthRepository:
             }
         )
         return user
+
+    def update_user(self, user_id: str, input: dict) -> None:
+        # payload dictionary to process data
+        payload = {
+            "phone": input.get("phone"),
+            "name": input.get("name"),
+            "city": input.get("city"),
+        }
+        # update the mongodb
+        self.database["users"].update_one(
+            {
+                "_id": ObjectId(user_id),
+            },
+            {
+                "$set": payload
+            }
+        )

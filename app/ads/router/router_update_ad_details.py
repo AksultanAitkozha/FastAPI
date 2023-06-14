@@ -23,6 +23,6 @@ def update_ad(
     svc: Service = Depends(get_service),
 ) -> dict[str, str]:
     res_update = svc.repository.update_ad(ad_id, jwt_data.user_id, input.dict())
-    if res_update.modified_count == 1:
+    if res_update.modified_count:
         return Response(status_code=200)
     return Response(status_code=404)

@@ -12,6 +12,6 @@ def delete_shanyrak(
     svc: Service = Depends(get_service),
 ) -> dict[str, str]:
     delete_result = svc.repository.delete_ad(ad_id, jwt_data.user_id)
-    if delete_result.deleted_count == 1:
+    if delete_result.deleted_count:
         return Response(status_code=200)
     return Response(status_code=404)

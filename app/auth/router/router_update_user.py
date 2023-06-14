@@ -12,7 +12,7 @@ class UpdateUserInfo(AppModel):
     city: str
 
 
-@router.patch("/auth/users/me")
+@router.patch("/users/me")
 def update_user_info(
     input: UpdateUserInfo,
     jwt_data: JWTData = Depends(parse_jwt_user_data),

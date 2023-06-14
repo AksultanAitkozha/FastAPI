@@ -25,7 +25,7 @@ class User(AppModel):
     city: str
 
 
-@router.get("/auth/users/me", response_model=User)
+@router.get("/users/me", response_model=User)
 def get_user_info(
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     svc: Service = Depends(get_service),

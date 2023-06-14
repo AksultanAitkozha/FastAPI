@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./deploy/dockerfiles/Dockerfile
+      dockerfile: ./deploy/dockerfiles/Dockerfile.dev
     environment: 
       - MONGOHOST=mongodb
       - AWS_ACCESS_KEY_ID='AKIAVL2UUMTHHSBXRQFP'

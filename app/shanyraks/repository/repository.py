@@ -62,35 +62,49 @@ class AdsRepository:
         )
 
     def create_comment(self, ad_id: str, user_id: str, content: str):
-        # timestamp of a tweet is based on Almaty timezone 
+        # timestamp of a tweet is based on Almaty timezone
         almaty_tz = pytz.timezone("Asia/Almaty")
         now = datetime.now(almaty_tz)
         return self.database["ads"].update_one(
             {"_id": ObjectId(ad_id)},
-            {"$push": {
-                "comments": {
-                    "_id": ObjectId(),
-                    "author_id": ObjectId(user_id),
-                    "content": content,
-                    "created_at": now,  # This adds the current UTC time
+            {
+                "$push": {
+                    "comments": {
+                        "_id": ObjectId(),
+                        "author_id": ObjectId(user_id),
+                        "content": content,
+                        "created_at": now,  # This adds the current UTC time
+                    }
                 }
-            }},
+            },
         )
 
     def get_comments(self, ad_id: str):
-        ad = self.database["ads"].find_one({"_id": ObjectId(ad_id)}, {"_id": 0, "comments": 1})
+        ad = self.database["ads"].find_one(
+            {"_id": ObjectId(ad_id)}, {"_id": 0, "comments": 1}
+        )
         if ad and "comments" in ad:
             return ad["comments"]
         return []
 
-    def update_comment(self, ad_id: str, comment_id: str, user_id: str, content: str) -> UpdateResult:
+    def update_comment(
+        self, ad_id: str, comment_id: str, user_id: str, content: str
+    ) -> UpdateResult:
         return self.database["ads"].update_one(
-            {"_id": ObjectId(ad_id), "comments._id": ObjectId(comment_id), "comments.author_id": ObjectId(user_id)},
+            {
+                "_id": ObjectId(ad_id),
+                "comments._id": ObjectId(comment_id),
+                "comments.author_id": ObjectId(user_id),
+            },
             {"$set": {"comments.$.content": content}},
         )
 
     def delete_comment(self, ad_id: str, comment_id: str, user_id: str):
         return self.database["ads"].update_one(
-            {"_id": ObjectId(ad_id), "comments._id": ObjectId(comment_id), "comments.author_id": ObjectId(user_id)},
+            {
+                "_id": ObjectId(ad_id),
+                "comments._id": ObjectId(comment_id),
+                "comments.author_id": ObjectId(user_id),
+            },
             {"$pull": {"comments": {"_id": ObjectId(comment_id)}}},
         )

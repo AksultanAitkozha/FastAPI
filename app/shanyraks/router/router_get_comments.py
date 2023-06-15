@@ -13,7 +13,9 @@ class CommentResponse(AppModel):
     author_id: str
 
 
-@router.get("/{shanyrak_id:str}/comments", response_model=dict[str, list[CommentResponse]])
+@router.get(
+    "/{shanyrak_id:str}/comments", response_model=dict[str, list[CommentResponse]]
+)
 def get_comments(
     ad_id: str,
     jwt_data: JWTData = Depends(parse_jwt_user_data),

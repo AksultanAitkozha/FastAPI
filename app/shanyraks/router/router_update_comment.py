@@ -19,7 +19,9 @@ def update_comment(
     svc: Service = Depends(get_service),
 ) -> dict[str, str]:
     user_id = jwt_data.user_id
-    update_result = svc.repository.update_comment(ad_id, comment_id, user_id, input.content)
+    update_result = svc.repository.update_comment(
+        ad_id, comment_id, user_id, input.content
+    )
     if update_result.modified_count:
         return {"message": "Comment updated successfully"}
     raise HTTPException(status_code=404, detail="Comment not found or unauthorized")

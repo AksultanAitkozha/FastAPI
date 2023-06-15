@@ -5,6 +5,8 @@ from app.config import database
 from .adapters.jwt_service import JwtService
 from .repository.repository import AuthRepository
 
+from .adapters.s3_service import S3Service
+
 
 class AuthConfig(BaseSettings):
     JWT_ALG: str = "HS256"
@@ -23,6 +25,7 @@ class Service:
     ):
         self.repository = repository
         self.jwt_svc = jwt_svc
+        self.s3_service = S3Service()
 
 
 def get_service():

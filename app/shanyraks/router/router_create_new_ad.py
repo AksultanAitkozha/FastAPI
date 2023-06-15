@@ -15,6 +15,8 @@ class HouseAd(AppModel):
     area: float
     rooms_count: int
     description: str
+    latitude: float = None  # new
+    longitude: float = None  # new
 
 
 class AdResponse(AppModel):
@@ -28,6 +30,11 @@ def create_ad(
     svc: Service = Depends(get_service)
 ) -> dict[str, str]:
     # Extract user_id from jwt_data
+    result = svc.here_service.get_coordinates(input.address)
+    print(result)
+    input.latitude = result['lat']
+    input.longitude = result['lng']
+
     housead_id = svc.repository.create_new_ad(jwt_data.user_id, input.dict())
 
     return AdResponse(id=housead_id)

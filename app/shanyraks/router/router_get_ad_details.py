@@ -17,6 +17,8 @@ class AdDetail(AppModel):
     rooms_count: int
     description: str
     user_id: Any
+    latitude: float  # new
+    longitude: float  # new
 
 
 @router.get("/{shanyrak_id:str}", response_model=AdDetail)

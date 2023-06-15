@@ -21,19 +21,10 @@ def get_comments(
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     svc: Service = Depends(get_service),
 ):
-    comments = svc.repository.get_comments(ad_id)
-    if not comments:
+    ad = svc.repository.get_ad_by_id(ad_id)
+    if not ad:
         raise HTTPException(status_code=404, detail="Ad not found or has no comments")
 
-    comment_responses = []
-    for comment in comments:
-        comment_responses.append(
-            CommentResponse(
-                _id=str(comment["_id"]),
-                content=comment["content"],
-                created_at=comment["created_at"].isoformat(),
-                author_id=str(comment["author_id"]),
-            )
-        )
+    comments = svc.repository.get_comments(ad_id)
 
-    return {"comments": comment_responses}
+    return comments

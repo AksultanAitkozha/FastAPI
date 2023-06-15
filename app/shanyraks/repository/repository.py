@@ -77,7 +77,7 @@ class AdsRepository:
 
     def get_comments(self, ad_id: str):
         ad = self.database["ads"].find_one(
-            {"_id": ObjectId(ad_id)}, {"_id": 0, "comments": 1}
+            {"_id": ObjectId(ad_id)},
         )
         if ad and "comments" in ad:
             return ad["comments"]

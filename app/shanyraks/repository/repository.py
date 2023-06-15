@@ -77,13 +77,20 @@ class AdsRepository:
             }},
         )
 
-    def get_comments(self, ad_id: str) -> List[dict]:
-        ads = self.database["ads"].find({"_id": ObjectId(ad_id)}, {"comments": 1})
-        result = []
-        for ad in ads:
-            for comment in ad["comments"]:
-                comment["_id"] = str(comment["_id"])
-                comment["author_id"] = str(comment["author_id"])
-                comment["created_at"] = comment["created_at"].isoformat()
-                result.append(comment)
-        return result
+    def get_comments(self, ad_id: str):
+        ad = self.database["ads"].find_one({"_id": ObjectId(ad_id)}, {"_id": 0, "comments": 1})
+        if ad and "comments" in ad:
+            return ad["comments"]
+        return []
+
+    def update_comment(self, ad_id: str, comment_id: str, user_id: str, content: str) -> UpdateResult:
+        return self.database["ads"].update_one(
+            {"_id": ObjectId(ad_id), "comments._id": ObjectId(comment_id), "comments.author_id": ObjectId(user_id)},
+            {"$set": {"comments.$.content": content}},
+        )
+
+    def delete_comment(self, ad_id: str, comment_id: str, user_id: str):
+        return self.database["ads"].update_one(
+            {"_id": ObjectId(ad_id), "comments._id": ObjectId(comment_id), "comments.author_id": ObjectId(user_id)},
+            {"$pull": {"comments": {"_id": ObjectId(comment_id)}}},
+        )

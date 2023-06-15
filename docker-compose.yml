@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: .\deploy\dockerfiles\Dockerfile
+      dockerfile: ./deploy/dockerfiles/Dockerfile
     environment: 
       - MONGOHOST=mongodb
     env_file: 

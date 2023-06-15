@@ -2,10 +2,15 @@ from fastapi import Depends, Response
 from app.utils import AppModel
 from ..service import Service, get_service
 from . import router
-from typing import Any
+from typing import Any, Optional
 from pydantic import Field
 from app.auth.adapters.jwt_service import JWTData
 from app.auth.router.dependencies import parse_jwt_user_data
+
+
+class Location(AppModel):
+    latitude: Optional[float]
+    longitude: Optional[float]
 
 
 class AdDetail(AppModel):
@@ -17,8 +22,7 @@ class AdDetail(AppModel):
     rooms_count: int
     description: str
     user_id: Any
-    latitude: float  # new
-    longitude: float  # new
+    location: Location
 
 
 @router.get("/{shanyrak_id:str}", response_model=AdDetail)

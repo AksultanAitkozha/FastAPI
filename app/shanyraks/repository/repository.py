@@ -1,8 +1,6 @@
 from typing import Any, List
 
-from datetime import datetime
-
-import pytz
+from datetime import datetime, timezone
 
 from bson.objectid import ObjectId
 
@@ -62,9 +60,7 @@ class AdsRepository:
         )
 
     def create_comment(self, ad_id: str, user_id: str, content: str):
-        # timestamp of a tweet is based on Almaty timezone
-        almaty_tz = pytz.timezone("Asia/Almaty")
-        now = datetime.now(almaty_tz)
+        now = datetime.now(timezone.utc)
         return self.database["ads"].update_one(
             {"_id": ObjectId(ad_id)},
             {
@@ -73,7 +69,7 @@ class AdsRepository:
                         "_id": ObjectId(),
                         "author_id": ObjectId(user_id),
                         "content": content,
-                        "created_at": now,  # This adds the current UTC time
+                        "created_at": now.isoformat(),
                     }
                 }
             },
